@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Website Responsiveness</title>
+	<link rel="stylesheet" href="/static/bootstrap.min.css">
+	<script type="text/javascript" src="/static/jquery.js" ></script>
+	<script src="/socket.io/socket.io.js"></script>
+	<style>
+		#dynamic{
+			padding-top: 100px;
+		}
+		.text{
+			height: 400px;
+			overflow:auto;
+		}
+ 		#url{
+ 			width:300px;
+ 		}
+	</style>
+	<script>
+		var socket = io.connect();
+
+		$(document).ready(function(){
+			$('#form-one').submit(function(){
+				$('#dynamic').empty();
+
+				socket.emit('message', $('.form-control').val());
+
+				$('#dynamic').html('Loading, Please wait...');
+
+				return false;
+			});
+
+			socket.on('image', function(err){
+				$('#dynamic').html('done');
+			});	
+		});
+	</script>
+</head>
+<body>
+	<nav class="navbar navbar-default navbar-fixed-top">
+  		<div class="container-fluid">
+    		<div class="col-md-12">
+    			<div class="col-md-12">
+	      			<form class="navbar-form text-center form-inline" role="form" autocomplete="off" id="form-one">
+	        			<div class="form-group">
+	          				<input type="text" id="url" class="form-control" placeholder="Enter website url...">
+	        			</div>
+	        			<button type="submit" class="btn btn-primary">TEST URL</button>
+	      			</form>
+	      		</div>
+    		</div>
+  		</div>
+	</nav>
+	<div class="container">
+		<div class="row form-group" id="dynamic">
+		</div>
+	</div>
+</body>
+</html>
